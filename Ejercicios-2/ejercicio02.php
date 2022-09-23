@@ -11,11 +11,11 @@ $b = rand(1, 10);
 
 
 
-echo "a = $a, b = $b";
-echo "Suma: " . sumar($a, $b);
-echo "Resta: " . restar($a,$b);
-echo "División: " . dividir($a,$b);
-echo "Multiplicación: " . multiplicar($a,$b);
+echo "a = $a, b = $b"  ."\n";
+echo "Suma: " . sumar($a, $b) ."\n";
+echo "Resta: " . restar($a,$b)."\n";
+echo "División: " . dividir($a,$b)."\n";
+echo "Multiplicación: " . multiplicar($a,$b)."\n";
 echo "Módulo: " . modulo($a,$b);
 echo "Potencia: " . potencia($a,$b);
 
