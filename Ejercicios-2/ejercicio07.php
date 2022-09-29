@@ -15,13 +15,13 @@ $generar_rgbwb = function () {
     return $colores[rand(0, 4)];
 
 };
-$generar_tabla = function ($filas, $columnas, $ancho, $alto, $funcion_color) use ($generar_color, $generar_rgbwb) {
+$generar_tabla = function ($filas, $columnas, $funcion_color) use ($generar_color, $generar_rgbwb) {
     echo "<table border='1'>";
     for ($i = 0; $i < $filas; $i++) {
         echo "<tr>";
         for ($j = 0; $j < $columnas; $j++) {
             $color = $funcion_color();
-            echo "<td width='$ancho' height='$alto' bgcolor='" . $color . "'></td>";
+            echo "<td width='30px' height='3'px' bgcolor='" . $color . "'></td>";
         }
         echo "</tr>";
     }

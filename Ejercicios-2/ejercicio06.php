@@ -1,13 +1,6 @@
 <?php
 /*
 
-/*
- * El usuario introduce: 3
-El programa mostrará:
-
-**** **** ****
-**** **** ****
-**************
  */
 echo "Introduce un número: ";
 $numero = trim(fgets(STDIN));
