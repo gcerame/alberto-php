@@ -5,6 +5,11 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        .jugador span {
+            font-size: 50px;
+        }
+    </style>
     <title>Document</title>
 </head>
 <body>
@@ -12,31 +17,31 @@
 
 include "dados.php";
 
-$jugador1 = generate_dice_throws();
-$jugador1_emojis = array_map('get_emoji', $jugador1);
-$jugador1_suma = array_sum($jugador1);
-$jugador2 = generate_dice_throws();
-$jugador2_emojis = array_map('get_emoji', $jugador2);
-$jugador2_suma = array_sum($jugador2);
+$player1 = generate_dice_throws();
+$player1_emojis = array_map('get_emoji', $player1);
+$player1_total = array_sum($player1);
+$player2 = generate_dice_throws();
+$player2_emojis = array_map('get_emoji', $player2);
+$player2_total = array_sum($player2);
 
 echo '<div class="jugador">';
 
-foreach ($jugador1_emojis as $value) {
+foreach ($player1_emojis as $value) {
     echo '<span>' . $value . '</span>';
 };
-echo 'Suma Jugador 1 ' . $jugador1_suma;
+echo 'Suma Jugador 1 ' . $player1_total;
 
 echo '</div>';
 
 echo '<div class="jugador">';
-foreach ($jugador2_emojis as $value) {
+foreach ($player2_emojis as $value) {
     echo '<span>' . $value . '</span>';
 };
-echo 'Suma Jugador 2 ' . $jugador2_suma;
+echo 'Suma Jugador 2 ' . $player2_total;
 echo '</div>';
 echo '
 <div>
-'.get_winner($jugador1_suma, $jugador2_suma).'
+'.get_winner($player1_total, $player2_total).'
 </div>';
 
 ?>
