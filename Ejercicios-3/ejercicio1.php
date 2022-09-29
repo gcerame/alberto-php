@@ -7,8 +7,9 @@ function random()
 function generateRandomArray($size)
 {
 
-    $aleatorios = array_fill(0, 20, 0);
-    return array_map('random', $aleatorios);
+    return array_fill(0, 20, function(){
+
+    });
 }
 
 ?>

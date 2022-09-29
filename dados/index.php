@@ -10,21 +10,14 @@
 <body>
 <?php
 
-include "ejercicio1.php";
+include "dados.php";
 
-$array= generateRandomArray(10);
-$numbersHTMLarray = array_map(function ($number) {
-    return "<td>$number</td>";
-}, $array);
-$numbersHTMLString = implode('', $numbersHTMLarray);
-
-echo'
-<table>
-<tr>
-'. $numbersHTMLString .'
-</tr>
-</table>
-'
+$jugador1 = generate_dice_throws();
+$jugador2 = generate_dice_throws();
+echo 'Jugador 1' . foreach ($jugador1 as $value){
+    return '<span>'. $value.'</span>';
+};
+echo 'Suma' . array_sum($jugada);
 
 ?>
 </body>
