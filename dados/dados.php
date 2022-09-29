@@ -23,6 +23,13 @@ function get_emoji($number): string
         default => 'Error',
     };
 }
+function get_winner($player1, $player2): string{
+    if($player1 ===$player2) return 'Empate';
+    if($player1 > $player2) return 'Gana el jugador 1';
+    if($player1 < $player2)
+        return 'Gana el jugador 2';
+    return 'Error';
+}
 
 
 ?>

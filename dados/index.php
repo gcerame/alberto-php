@@ -13,11 +13,31 @@
 include "dados.php";
 
 $jugador1 = generate_dice_throws();
+$jugador1_emojis = array_map('get_emoji', $jugador1);
+$jugador1_suma = array_sum($jugador1);
 $jugador2 = generate_dice_throws();
-echo 'Jugador 1' . foreach ($jugador1 as $value){
-    return '<span>'. $value.'</span>';
+$jugador2_emojis = array_map('get_emoji', $jugador2);
+$jugador2_suma = array_sum($jugador2);
+
+echo '<div class="jugador">';
+
+foreach ($jugador1_emojis as $value) {
+    echo '<span>' . $value . '</span>';
 };
-echo 'Suma' . array_sum($jugada);
+echo 'Suma Jugador 1 ' . $jugador1_suma;
+
+echo '</div>';
+
+echo '<div class="jugador">';
+foreach ($jugador2_emojis as $value) {
+    echo '<span>' . $value . '</span>';
+};
+echo 'Suma Jugador 2 ' . $jugador2_suma;
+echo '</div>';
+echo '
+<div>
+'.get_winner($jugador1_suma, $jugador2_suma).'
+</div>';
 
 ?>
 </body>
