@@ -7,7 +7,7 @@ function generate_throw(): int
 }
 function generate_dice_throws(): array
 {
-    $dice_throws = array_fill(0, 6, 0);
+    $dice_throws = array_fill(0, 5, 0);
     return array_map('generate_throw', $dice_throws);
 }
 
@@ -30,6 +30,11 @@ function get_winner($player1, $player2): string{
         return 'Gana el Jugador 2';
     return 'Error';
 }
-
+function calculate_sum($play){
+    $sum = array_sum($play);
+    $max = max($play);
+    $min = min($play);
+    return $sum - $max - $min;
+}
 
 ?>
