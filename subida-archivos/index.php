@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -12,11 +11,12 @@
 <form action="imageUpload.php" method="post" enctype="multipart/form-data">
     <fieldset>
         <legend>Image upload</legend>
-        <p>Please select the files to upload (Max file size 200kb, max total filesize 300kb</p>
+        <p>Please select the files to upload (Max file size 200kb, max total filesize 300kb)</p>
         <input type="hidden" name="MAX_FILE_SIZE" value="200000"/>
         <input type="file" name="filesToUpload[]" id="fileToUpload" multiple accept="image/png, image/jpeg">
         <input type="submit" value="Upload Image" name="submit">
-        <input type="reset" value="Reset form"></fieldset>
+        <input type="reset" value="Reset form">
+    </fieldset>
 </form>
 </body>
 </html>
