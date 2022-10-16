@@ -8,8 +8,10 @@ const MAX_TOTAL_FILE_SIZE = '300000';
 
 function createImagesDir(): void
 {
+    //Propietario apache
     if (!is_dir('.' . IMAGES_DIR)) {
         mkdir(IMAGES_DIR);
+        chmod(IMAGES_DIR, 0755);
     }
 }
 
@@ -19,10 +21,6 @@ function getExistingFiles($dir): array
         return $existingImages = array_diff(scandir(CURRENT_DIR . IMAGES_DIR), array('.', '..'));
     }
     return [];
-}
-
-function saveFile($file)
-{
 }
 
 
@@ -59,7 +57,31 @@ function checkFileExtensions($files): bool
     return true;
 }
 
+function writeFile ($file, $fileName): boolean
+{
+    //Only upload if the file doesn't exist in the dir
+    if (!in_array($fileName, getExistingFiles(IMAGES_DIR))) {
+        return move_uploaded_file($file, CURRENT_DIR . IMAGES_DIR . '/' . $fileName);
+    }
+    return false;
+}
+function file_exists_in_dir($fileName): bool
+{
+    return in_array($fileName, getExistingFiles(IMAGES_DIR));
+}
+
+function writeFiles($files): void
+{
+    foreach ($files['name'] as $key => $name) {
+        $file = $files['tmp_name'][$key];
+        writeFile($file, $name);
+    }
+};
+
+
+
 echo checkFileSizes($_FILES['filesToUpload']);
 echo checkFileExtensions($_FILES['filesToUpload']);
 createImagesDir();
-print_r(getExistingFiles(IMAGES_DIR));
+
+var_dump($_FILES);
