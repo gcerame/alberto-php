@@ -12,9 +12,11 @@ const TOTAL_FILESIZE_TOO_LARGE = 2;
 const INDIVIDUAL_AND_TOTAL_FILESIZE_TOO_LARGE = 3;
 
 
-function print_array($array){
-    echo '<pre>'.print_r($array).'</pre>';
+function print_array($array)
+{
+    echo '<pre>' . print_r($array) . '</pre>';
 }
+
 function getExistingFiles($dir): array
 {
     if (is_dir(CURRENT_DIR . IMAGES_DIR)) {
@@ -57,11 +59,8 @@ function checkFileExtensions($files): bool
 
 function writeFile($file, $fileName): bool
 {
-    echo CURRENT_DIR . IMAGES_DIR . '/';
-    //Only upload if the file doesn't exist in the dir
     if (!in_array($fileName, getExistingFiles(IMAGES_DIR))) {
-        echo 'copied file';
-       move_uploaded_file($file, CURRENT_DIR . IMAGES_DIR . '/' . $fileName);
+        move_uploaded_file($file, CURRENT_DIR . IMAGES_DIR . '/' . $fileName);
     }
     return false;
 }
@@ -71,20 +70,46 @@ function fileExists($fileName, $files): bool
     return !in_array($fileName, getExistingFiles(IMAGES_DIR));
 }
 
-function writeFiles($files): void
+function writeFiles($files): bool
 {
     foreach ($files['name'] as $key => $name) {
         $file = $files['tmp_name'][$key];
-        writeFile($file, $name);
+        $writeFileOK = writeFile($file, $name);
+        if (!$writeFileOK) {
+            return false;
+        }
+
     }
+    return true;
+}
+
+if ($_FILES['filesToUpload']['error'][0] === 4) {
+    echo 'You must select a file to upload';
+    exit();
 }
 
 if (isset($_FILES['filesToUpload'])) {
     $filesToUpload = $_FILES['filesToUpload'];
-    if (checkFileSizes($filesToUpload) === 0 && checkFileExtensions($filesToUpload)) {
+    $fileSizesStatus = checkFileSizes($filesToUpload);
+    $fileExtensionsOK = checkFileExtensions($filesToUpload);
+    if ($fileSizesStatus === FILESIZES_OK && $fileExtensionsOK) {
         echo 'File saved';
         writeFiles($filesToUpload);
+    } else if ($fileSizesStatus !== FILESIZES_OK) {
+        switch ($fileSizesStatus) {
+            case FILESIZE_TOO_LARGE:
+                echo 'One file is too large';
+                break;
+            case TOTAL_FILESIZE_TOO_LARGE:
+                echo 'The total filesize is too large';
+                break;
+            case INDIVIDUAL_AND_TOTAL_FILESIZE_TOO_LARGE:
+                echo 'Individual filesize and total filesize (of all files) is too large';
+        }
+    } else if (!$fileExtensionsOK) {
+        echo 'File extension not allowed';
     }
+
 }
 
 
