@@ -82,8 +82,13 @@ if (isset($_FILES['filesToUpload'])) {
     $fileSizesStatus = checkFileSizes($filesToUpload);
     $fileExtensionsOK = checkFileExtensions($filesToUpload);
     if ($fileSizesStatus === FILESIZES_OK && $fileExtensionsOK) {
+        $writeFileStatus = writeFiles($filesToUpload);
+        if (!$writeFileStatus) {
+            echo 'File already exists';
+            exit();
+        }
         echo 'File saved';
-        writeFiles($filesToUpload);
+
     } else if ($fileSizesStatus !== FILESIZES_OK) {
         switch ($fileSizesStatus) {
             case FILESIZE_TOO_LARGE:
