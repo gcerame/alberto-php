@@ -11,12 +11,6 @@ const FILESIZE_TOO_LARGE = 1;
 const TOTAL_FILESIZE_TOO_LARGE = 2;
 const INDIVIDUAL_AND_TOTAL_FILESIZE_TOO_LARGE = 3;
 
-
-function print_array($array)
-{
-    echo '<pre>' . print_r($array) . '</pre>';
-}
-
 function getExistingFiles($dir): array
 {
     if (is_dir(CURRENT_DIR . IMAGES_DIR)) {
@@ -63,11 +57,6 @@ function writeFile($file, $fileName): bool
         move_uploaded_file($file, CURRENT_DIR . IMAGES_DIR . '/' . $fileName);
     }
     return false;
-}
-
-function fileExists($fileName, $files): bool
-{
-    return !in_array($fileName, getExistingFiles(IMAGES_DIR));
 }
 
 function writeFiles($files): bool
