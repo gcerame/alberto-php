@@ -7,15 +7,15 @@
         </tr>
         <tr>
             <td>Nº de palabras:</td>
-            <td>6</td>
+            <td><?= str_word_count($_REQUEST['comentario']) ?></td>
         </tr>
         <tr>
             <td>Letra + repetida:</td>
-            <td>a</td>
+            <td><?= mostRepeatedChar($_REQUEST['comentario']) ?></td>
         </tr>
         <tr>
             <td>Palabra + repetida:</td>
-            <td>Hola</td>
+            <td><?= mostRepeatedWord($_REQUEST['comentario']) ?></td>
         </tr>
     </table>
 </div>

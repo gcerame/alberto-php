@@ -12,12 +12,20 @@ function usuarioOk($usuario, $contraseña): bool
 }
 
 function removeInjectedCode($string){
-    return trim(htmlspecialchars($string, ENT_QUOTES, 'UTF-8'));
+    return htmlspecialchars($string);
 }
 
 function mostRepeatedWord($string){
     $stringLowerCase = strtolower($string);
     $frequencies = array_count_values(str_word_count($stringLowerCase,1));
     ksort($frequencies);
-    return $frequencies[array_key_first($frequencies)];
+    return array_key_first($frequencies);
 }
+
+function mostRepeatedChar($string){
+    $chars = array_count_values(str_split($string));
+    ksort($chars);
+    return array_keys($chars)[0];
+}
+
+
