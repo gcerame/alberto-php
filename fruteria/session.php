@@ -1,8 +1,10 @@
 <?php
 
-if (!isset($_SESSION)) {
+if (!isset($_SESSION['usuario'])) {
     session_start();
     $_SESSION['usuario'] = $_POST['usuario'];
-    include 'pedido.php';
+    header("Location: pedido.php");
+}else{
+    header("Location: pedido.php");
 
 }
