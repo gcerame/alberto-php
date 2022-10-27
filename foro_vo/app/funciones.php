@@ -11,8 +11,8 @@ function usuarioOk($usuario, $contraseña): bool
 
 }
 
-function removeInjectedCode($string){
-    return htmlspecialchars($string);
+function removeInjectedCode(&$string){
+    return $string = htmlspecialchars($string);
 }
 
 function mostRepeatedWord($string){
@@ -25,7 +25,9 @@ function mostRepeatedWord($string){
 function mostRepeatedChar($string){
     $chars = array_count_values(str_split($string));
     ksort($chars);
-    return array_keys($chars)[0];
+    return array_key_first($chars);
 }
+
+echo mostRepeatedChar('abbbbbccc');
 
 
