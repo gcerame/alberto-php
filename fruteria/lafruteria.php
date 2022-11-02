@@ -1,17 +1,29 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Frutería del siglo XXI</title>
-</head>
-<body>
+
 <?php
-include_once 'header.php';
-include_once 'login.php';
+include_once 'vistas.php';
+session_start();
+$_SESSION['pedido']=
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET'){
+    if(isset($_SESSION['usuario'])){
+        mostrarPagina(mostrarFormularioPedido($_SESSION['usuario']));
+    }else{
+        if (isset($_GET['usuario'])){
+            $_SESSION['usuario'] = $_GET['usuario'];
+            mostrarPagina(mostrarFormularioPedido($_SESSION['usuario']));
+        }else{
+            mostrarPagina(mostrarLogin());
+
+        }
+    }
+}elseif ($_SERVER['REQUEST_METHOD']==='POST'){
+    if($_POST['submit']==='anotar'){
+        $fruta= $_POST['frutas'];
+        $cantidad= $_POST['cantidad'];
+        $_SESSION['pedido'][$fruta] += $cantidad;
+        $contenido = mostrarPedido().mostrarFormularioPedido($_SESSION['usuario']);
+        mostrarPagina($contenido);
+    }
+}
 
 ?>
-</body>
-</html>
