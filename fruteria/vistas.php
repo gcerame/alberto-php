@@ -15,16 +15,17 @@ function mostrarLogin()
 
 function mostrarPedido ()
 {
-    $salida = '<div>';
-    $salida .= '<ul>';
+    $pedido = '<div>';
+    $pedido .= '<span>Este es su pedido</span>';
+    $pedido .= '<ul>';
 
     foreach ($_SESSION['pedido'] as $fruta => $cantidad) {
-        $salida .= '<li>' . $fruta . ' ' . $cantidad . '</li>';
+        $pedido .= '<li>' . $fruta . ' ' . $cantidad . '</li>';
     }
-    $salida .= '</ul>';
-    $salida .= '</div>';
+    $pedido .= '</ul>';
+    $pedido .= '</div>';
 
-    return $salida;
+    return $pedido;
 }
 
 function mostrarFormularioPedido($usuario)

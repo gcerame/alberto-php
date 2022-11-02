@@ -22,6 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET'){
         $_SESSION['pedido'][$fruta] += $cantidad;
         $contenido = mostrarPedido().mostrarFormularioPedido($_SESSION['usuario']);
         mostrarPagina($contenido);
+    }else if ($_POST['submit'] ==='terminar'){
+        session_destroy();
+        mostrarPagina(mostrarLogin());
     }
 }
 
