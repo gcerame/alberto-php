@@ -2,7 +2,6 @@
 <?php
 include_once 'vistas.php';
 session_start();
-$_SESSION['pedido']=
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET'){
     if(isset($_SESSION['usuario'])){
