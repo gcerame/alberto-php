@@ -37,7 +37,7 @@ function controller()
 function elegirPalabra(): string
 {
 
-    $palabras = array('Madrid');
+    $palabras = array('Madrid', 'Barcelona', 'Paris');
     return $palabras[array_rand($palabras, 1)];
 }
 
@@ -85,7 +85,7 @@ function vistaGeneral($contenido): void {
 
 function vistaJuego(): string{
     $vista = '<p>Palabra: ' . implode($_SESSION['palabraHuecos']) . '</p>';
-    $vista .= '<p>Has cometido ' . $_SESSION['fallos'] .' fallos.</p>';
+        $vista .= '<p>Has cometido ' . $_SESSION['fallos'] .' fallos.</p>';
     $vista .= '<form action="ahorcado.php" method="post"><label>Introduzca una letra<input name="letra"></label></form>';
     return $vista;
 
