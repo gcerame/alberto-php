@@ -8,5 +8,5 @@ define('FILEUSER','dat/usuarios.txt');
 // txt  - Fichero de texto con un usuario en cada línea separados los campos por |
 // csv  - Fichero de hoja de cálculo un usuario en cada línea separados por ,
 // json - Fichero que guarda la tabla en formato JSON
-define('TIPO','txt');
+define('TIPO','json');
 

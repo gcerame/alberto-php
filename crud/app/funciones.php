@@ -35,7 +35,14 @@ function cargarDatostxt(){
 }
 //Vuelca los datos a un fichero de texto
 function volcarDatostxt($tvalores){
-
+    if(is_writable(FILEUSER)){
+        $fichero = @fopen(FILEUSER,'w');
+        foreach ($tvalores as $usuario){
+            fwrite($fichero,implode('|', $usuario));
+            fwrite($fichero,PHP_EOL);
+        }
+        fclose($fichero);
+    }
     
 }
 
@@ -43,11 +50,18 @@ function volcarDatostxt($tvalores){
 // FICHERO DE CSV
 
 function cargarDatoscsv (){
+
    
 }
 
 //Vuelca los datos a un fichero de csv
 function volcarDatoscsv($tvalores){
+    if (is_writable(FILEUSER)){
+        $fichero = @fopen(FILEUSER, 'w');
+        foreach ($tvalores as $usuario){
+            fputcsv($fichero,$usuario);
+        }
+    }
    
 }
 
@@ -58,7 +72,12 @@ function cargarDatosjson (){
 }
 
 function volcarDatosjson($tvalores){
-    
+    if (is_writable(FILEUSER)){
+        $fichero = @fopen(FILEUSER.'test', 'w');
+
+            fwrite($fichero, json_encode($tvalores));
+
+    }
    
     
 }
