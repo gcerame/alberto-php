@@ -2,118 +2,135 @@
 include_once 'app/config.php';
 
 // Cargo los datos segun el formato de configuración
-function cargarDatos(){
-    $funcion =__FUNCTION__.TIPO; // cargarDatostxt
+function cargarDatos()
+{
+    $funcion = __FUNCTION__ . TIPO; // cargarDatostxt
     return $funcion();
 }
 
-function volcarDatos($valores){
-    $funcion =__FUNCTION__.TIPO;
+function volcarDatos($valores)
+{
+    $funcion = __FUNCTION__ . TIPO;
     $funcion($valores);
 }
 
 // ----------------------------------------------------
 // FICHERO DE TEXT 
 //Carga los datos de un fichero de texto
-function cargarDatostxt(){
+function cargarDatostxt()
+{
     // Si no existe lo creo
-    $tabla=[]; 
-    if (!is_readable(FILEUSER) ){
+    $tabla = [];
+    if (!is_readable(FILEUSER)) {
         // El directorio donde se crea tiene que tener permisos adecuados
-        $fich = @fopen(FILEUSER,"w") or die ("Error al crear el fichero.");
+        $fich = @fopen(FILEUSER, "w") or die ("Error al crear el fichero.");
         fclose($fich);
     }
     $fich = @fopen(FILEUSER, 'r') or die("ERROR al abrir fichero de usuarios"); // abrimos el fichero para lectura
-    
+
     while ($linea = fgets($fich)) {
         $partes = explode('|', trim($linea));
         // Escribimos la correspondiente fila en tabla
-        $tabla[]= [ $partes[0],$partes[1],$partes[2],$partes[3]];
-        }
+        $tabla[] = [$partes[0], $partes[1], $partes[2], $partes[3]];
+    }
     fclose($fich);
     return $tabla;
 }
+
 //Vuelca los datos a un fichero de texto
-function volcarDatostxt($tvalores){
-    if(is_writable(FILEUSER)){
-        $fichero = @fopen(FILEUSER,'w');
-        foreach ($tvalores as $usuario){
-            fwrite($fichero,implode('|', $usuario));
-            fwrite($fichero,PHP_EOL);
+function volcarDatostxt($tvalores)
+{
+    if (is_writable(FILEUSER)) {
+        $fichero = @fopen(FILEUSER, 'w');
+        foreach ($tvalores as $usuario) {
+            fwrite($fichero, implode('|', $usuario));
+            fwrite($fichero, PHP_EOL);
         }
         fclose($fichero);
     }
-    
+
 }
 
 // ----------------------------------------------------
 // FICHERO DE CSV
 
-function cargarDatoscsv (){
+function cargarDatoscsv()
+{
+    $tabla = [];
+    if(is_readable(FILEUSER)){
+        $fichero = @fopen(FILEUSER,'r');
+        while ($partes = fgetcsv($fichero)) {
+            $tabla[]= [ $partes[0],$partes[1],$partes[2],$partes[3]];
+        }
+        return $tabla;
+    }
 
-   
 }
 
 //Vuelca los datos a un fichero de csv
-function volcarDatoscsv($tvalores){
-    if (is_writable(FILEUSER)){
+function volcarDatoscsv($tvalores)
+{
+    if (is_writable(FILEUSER)) {
         $fichero = @fopen(FILEUSER, 'w');
-        foreach ($tvalores as $usuario){
-            fputcsv($fichero,$usuario);
+        foreach ($tvalores as $usuario) {
+            fputcsv($fichero, $usuario);
         }
     }
-   
+
 }
 
 // ----------------------------------------------------
 // FICHERO DE JSON
-function cargarDatosjson (){
-  
-}
-
-function volcarDatosjson($tvalores){
-    if (is_writable(FILEUSER)){
-        $fichero = @fopen(FILEUSER.'test', 'w');
-
-            fwrite($fichero, json_encode($tvalores));
-
+function cargarDatosjson()
+{
+    if (is_readable(FILEUSER)) {
+        $fichero = @file_get_contents(FILEUSER);
+        return json_decode($fichero);
     }
-   
-    
+    return [];
+}
+
+function volcarDatosjson($tvalores)
+{
+    if (is_readable(FILEUSER) && is_writable(FILEUSER)) {
+        $fichero = @fopen(FILEUSER . 'test', 'w');
+        fwrite($fichero, json_encode($tvalores));
+    }
+
+
 }
 
 
+// MOSTRA LOS DATOS DE LA TABLA DE ALMACENADA EN AL SESSION
+function mostrarDatos()
+{
 
-
-// MOSTRA LOS DATOS DE LA TABLA DE ALMACENADA EN AL SESSION 
-function mostrarDatos (){
-    
-    $titulos = [ "Nombre","login","Password","Comentario"];
+    $titulos = ["Nombre", "login", "Password", "Comentario"];
     $msg = "<table>\n";
-     // Identificador de la tabla
+    // Identificador de la tabla
     $msg .= "<tr>";
-    for ($j=0; $j < CAMPOSVISIBLES; $j++){
+    for ($j = 0; $j < CAMPOSVISIBLES; $j++) {
         $msg .= "<th>$titulos[$j]</th>";
-    }  
+    }
     $msg .= "</tr>";
     $auto = $_SERVER['PHP_SELF'];
-    $id=0;
+    $id = 0;
     $nusuarios = count($_SESSION['tuser']);
-    for($id=0; $id< $nusuarios ; $id++){
+    for ($id = 0; $id < $nusuarios; $id++) {
         $msg .= "<tr>";
         $datosusuario = $_SESSION['tuser'][$id];
-        for ($j=0; $j < CAMPOSVISIBLES; $j++){
+        for ($j = 0; $j < CAMPOSVISIBLES; $j++) {
             $msg .= "<td>$datosusuario[$j]</td>";
         }
-        $msg .="<td><a href=\"#\" onclick=\"confirmarBorrar('$datosusuario[0]',$id);\" >Borrar</a></td>\n";
-        $msg .="<td><a href=\"".$auto."?orden=Modificar&id=$id\">Modificar</a></td>\n";
-        $msg .="<td><a href=\"".$auto."?orden=Detalles&id=$id\" >Detalles</a></td>\n";
-        $msg .="</tr>\n";
-        
+        $msg .= "<td><a href=\"#\" onclick=\"confirmarBorrar('$datosusuario[0]',$id);\" >Borrar</a></td>\n";
+        $msg .= "<td><a href=\"" . $auto . "?orden=Modificar&id=$id\">Modificar</a></td>\n";
+        $msg .= "<td><a href=\"" . $auto . "?orden=Detalles&id=$id\" >Detalles</a></td>\n";
+        $msg .= "</tr>\n";
+
     }
     $msg .= "</table>";
-   
-    return $msg;    
+
+    return $msg;
 }
 
 /*
@@ -122,8 +139,9 @@ function mostrarDatos (){
 
 
 // Función para limpiar todos elementos de un array
-function limpiarArrayEntrada(array &$entrada){
-  // Sin implementar
-    
+function limpiarArrayEntrada(array &$entrada)
+{
+    // Sin implementar
+
 }
 
