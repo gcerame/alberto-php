@@ -50,8 +50,11 @@ function volcarDatostxt($tvalores){
 // FICHERO DE CSV
 
 function cargarDatoscsv (){
-
-   
+    if(is_readable(FILEUSER)){
+        $fichero = @fopen(FILEUSER, 'r');
+        return fgetcsv($fichero);
+    }
+   return [];
 }
 
 //Vuelca los datos a un fichero de csv
@@ -68,15 +71,16 @@ function volcarDatoscsv($tvalores){
 // ----------------------------------------------------
 // FICHERO DE JSON
 function cargarDatosjson (){
-  
+  if(is_readable(FILEUSER)){
+      return json_decode(file_get_contents(FILEUSER));
+  }
+  return [];
 }
 
 function volcarDatosjson($tvalores){
     if (is_writable(FILEUSER)){
         $fichero = @fopen(FILEUSER.'test', 'w');
-
-            fwrite($fichero, json_encode($tvalores));
-
+        fwrite($fichero, json_encode($tvalores));
     }
    
     
