@@ -18,7 +18,6 @@ function crearIncidencia()
     return [ $fecha,$nombre, $resumen, $prioridad, $ip];
 }
 
-//User can't create more than 3 incidencias in 2 minutes using session
 session_start();
 if (!isset($_SESSION['incidencias'])) {
     $_SESSION['incidencias'] = 0;
