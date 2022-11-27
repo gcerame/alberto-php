@@ -1,0 +1,12 @@
+[
+["Javascripts es un lenguaje que se puede utilizar para BackEnd y FrontEnd","V"],
+["PHP suele trabaja con Apache","V"],
+["Un servidor normalmente solo puede procesar una petici\u00f3n a la vez","F"],
+["MongoDb es un ejemplo de Base de datos no relacional","V"],
+["En entorno Microsoft disponemos de lenguaje C# y ASP para realizar el Front","F"],
+["El servicio HTTPS suele utilizar el puerto 80","F"],
+["Mediante el m\u00e9todo GET podemos enviar m\u00e1s datos que mediante el POST","F"],
+["Las clave de una array en PHP siempre empieza por 0","F"],
+["En PHP no se permite la herencia entre clases","F"],
+["De una clase abstracta no podemos instanciar un objeto.","V"]
+]
