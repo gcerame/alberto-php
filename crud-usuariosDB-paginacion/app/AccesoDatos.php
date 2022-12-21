@@ -29,12 +29,13 @@ class AccesoDatos
     private function __construct()
     {
 
-
-        $this->dbh = new mysqli(DB_SERVER, DB_USER, DB_PASSWD, DATABASE);
-
-        if ($this->dbh->connect_error) {
-            die(" Error en la conexión " . $this->dbh->connect_errno);
+        try {
+            $this->dbh = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DATABASE, DB_USER, DB_PASSWD);
+            $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
         }
+
 
     }
 
@@ -49,14 +50,15 @@ class AccesoDatos
         }
     }
 
-    function getNumClientes(): int {
+    function getNumClientes(): int
+    {
         //Query the database for count of clientes
         $result = $this->dbh->query("SELECT COUNT(*) FROM Clientes");
-        $row = $result->fetch_row();
+        $row = $result->fetch(PDO::FETCH_NUM);
         return $row[0];
     }
 
-    // SELECT Devuelvo la lista de Usuarios
+
     public function getUsuarios($primero, $cuantos): array
     {
         $tuser = [];
@@ -67,11 +69,11 @@ class AccesoDatos
         // Ejecuto la sentencia
         $stmt_usuarios->execute();
         // Obtengo los resultados
-        $result = $stmt_usuarios->get_result();
+        $result = $stmt_usuarios->fetchAll(PDO::FETCH_CLASS, 'Cliente');
         // Si hay resultado correctos
         if ($result) {
             // Obtengo cada fila de la respuesta como un objeto de tipo Usuario
-            while ($user = $result->fetch_object('Cliente')) {
+            foreach ($result as $user) {
                 $tuser[] = $user;
             }
         }
@@ -84,15 +86,14 @@ class AccesoDatos
     {
         $user = false;
 
-        $stmt_usuario = $this->dbh->prepare("select * from Clientes where id =?");
-        if (!$stmt_usuario) die ($this->dbh->error);
+        $stmt_usuario = $this->dbh->prepare("select * from Clientes where id = :id");
 
-        // Enlazo $id con el primer ?
-        $stmt_usuario->bind_param("s", $id);
+        $stmt_usuario->bindParam(':id', $id);
+
         $stmt_usuario->execute();
-        $result = $stmt_usuario->get_result();
+        $result = $stmt_usuario->fetch(PDO::FETCH_OBJ);
         if ($result) {
-            $user = $result->fetch_object('Cliente');
+            $user = $result;
         }
         return $user;
     }
@@ -101,42 +102,49 @@ class AccesoDatos
     // UPDATE
     public function modUsuario($user): bool
     {
+        $stmt_moduser = $this->dbh->prepare("update Clientes set first_name=:first_name, last_name=:last_name, email=:email, gender=:gender, ip_address=:ip_address, telefono=:telefono where id=:id");
 
-        $stmt_moduser = $this->dbh->
-        prepare("update Clientes set first_name=?, last_name=?, email=?, gender=?, ip_address=?, telefono=? where id=?");
 
-        if ($stmt_moduser == false) die ($this->dbh->error . "En la línea:" . __LINE__);
-
-        $stmt_moduser->bind_param("sssssss", $user->first_name, $user->last_name, $user->email, $user->gender, $user->ip_address, $user->telefono, $user->id);
+        $stmt_moduser->bindParam(':first_name', $user->first_name);
+        $stmt_moduser->bindParam(':last_name', $user->last_name);
+        $stmt_moduser->bindParam(':email', $user->email);
+        $stmt_moduser->bindParam(':gender', $user->gender);
+        $stmt_moduser->bindParam(':ip_address', $user->ip_address);
+        $stmt_moduser->bindParam(':telefono', $user->telefono);
+        $stmt_moduser->bindParam(':id', $user->id);
         $stmt_moduser->execute();
-        $resu = ($this->dbh->affected_rows == 1);
-        return $resu;
+        return ($stmt_moduser->rowCount() == 1);
     }
 
     //INSERT
     public function addUsuario($user): bool
     {
+        $stmt_creauser = $this->dbh->prepare("insert into Clientes (id, first_name, last_name, email, gender, ip_address, telefono) Values(:id,:first_name,:last_name,:email,:gender,:ip_address,:telefono)");
 
-        $stmt_creauser = $this->dbh->prepare("insert into Clientes (id, first_name, last_name, email, gender, ip_address, telefono) Values(?,?,?,?,?,?,?)");
-        if ($stmt_creauser == false) die ($this->dbh->error);
+        $stmt_creauser->bindParam(':id', $user->id);
+        $stmt_creauser->bindParam(':first_name', $user->first_name);
+        $stmt_creauser->bindParam(':last_name', $user->last_name);
+        $stmt_creauser->bindParam(':email', $user->email);
+        $stmt_creauser->bindParam(':gender', $user->gender);
+        $stmt_creauser->bindParam(':ip_address', $user->ip_address);
+        $stmt_creauser->bindParam(':telefono', $user->telefono);
 
-        $stmt_creauser->bind_param("sssssss", $user->id, $user->first_name, $user->last_name, $user->email, $user->gender, $user->ip_address, $user->telefono);
         $stmt_creauser->execute();
-        $resu = ($this->dbh->affected_rows == 1);
-        return $resu;
+        return ($stmt_creauser->rowCount() == 1);
     }
+
 
     //DELETE
     public function borrarUsuario(string $id): bool
     {
-        $stmt_boruser = $this->dbh->prepare("delete from Clientes where id =?");
-        if ($stmt_boruser == false) die ($this->dbh->error);
+        $stmt_boruser = $this->dbh->prepare("delete from Clientes where id = :id");
 
-        $stmt_boruser->bind_param("s", $id);
+        $stmt_boruser->bindParam(':id', $id);
         $stmt_boruser->execute();
-        $resu = ($this->dbh->affected_rows == 1);
+        $resu = ($stmt_boruser->rowCount() == 1);
         return $resu;
     }
+
 
     // Evito que se pueda clonar el objeto. (SINGLETON)
     public function __clone()
